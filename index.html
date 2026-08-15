@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>115年度升遷流程回饋問卷</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F6F1;
+    --paper-alt:#ECEEE7;
+    --ink:#20302B;
+    --ink-soft:#5A6862;
+    --pine:#2F6B57;
+    --pine-dark:#1F4E3F;
+    --mist:#E3EFE7;
+    --clay:#DB8A52;
+    --clay-soft:#F4DFC9;
+    --clay-deep:#B96A38;
+    --slate:#94A39C;
+    --line:#DEE3DB;
+    --white:#FFFFFF;
+    --radius-lg:22px;
+    --radius-md:16px;
+    --radius-sm:10px;
+    --shadow:0 10px 28px rgba(32,48,43,0.09);
+    --shadow-sm:0 4px 12px rgba(32,48,43,0.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Noto Sans TC','Noto Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    min-height:100vh;
+  }
+  .serif{font-family:'Noto Serif TC','Noto Serif',serif;}
+  .num{font-family:'Inter',sans-serif;}
+
+  /* background texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:
+      radial-gradient(600px 400px at 90% -5%, rgba(219,138,82,0.10), transparent 60%),
+      radial-gradient(500px 380px at -10% 15%, rgba(47,107,87,0.10), transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  #app{position:relative; z-index:1; max-width:640px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column;}
+
+  /* ---------- Progress bar ---------- */
+  .progress-wrap{
+    position:sticky; top:0; z-index:20;
+    background:rgba(245,246,241,0.92);
+    backdrop-filter:blur(6px);
+    padding:14px 20px 12px;
+    border-bottom:1px solid var(--line);
+  }
+  .progress-label{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-size:12.5px; color:var(--ink-soft); margin-bottom:8px;
+  }
+  .progress-label .section-name{font-weight:700; color:var(--pine-dark);}
+  .progress-track{
+    position:relative; height:6px; background:var(--paper-alt); border-radius:6px; overflow:hidden;
+  }
+  .progress-fill{
+    position:absolute; left:0; top:0; height:100%;
+    background:linear-gradient(90deg, var(--pine), var(--clay));
+    border-radius:6px;
+    transition:width .5s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-dots{display:flex; justify-content:space-between; margin-top:8px;}
+  .p-dot{
+    width:6px; height:6px; border-radius:50%; background:var(--line); transition:all .3s;
+  }
+  .p-dot.done{background:var(--pine);}
+  .p-dot.current{background:var(--clay); transform:scale(1.6);}
+
+  /* ---------- Screens ---------- */
+  .screen{
+    flex:1; display:flex; flex-direction:column;
+    padding:28px 20px 120px;
+    animation:fadeSlide .45s cubic-bezier(.2,.7,.3,1);
+  }
+  @keyframes fadeSlide{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* ---------- Welcome screen ---------- */
+  .welcome{align-items:stretch; padding-top:52px;}
+  .ascend{width:86px; height:56px; margin-bottom:22px;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:12.5px; letter-spacing:.06em; color:var(--pine-dark);
+    background:var(--mist); padding:5px 12px; border-radius:20px;
+    width:fit-content; margin-bottom:18px; font-weight:700;
+  }
+  .headline{
+    font-size:30px; line-height:1.35; font-weight:700; margin:0 0 10px;
+    color:var(--ink);
+  }
+  .subhead{
+    font-size:16px; color:var(--pine-dark); font-weight:600; margin:0 0 20px;
+  }
+  .desc{
+    font-size:14.5px; line-height:1.8; color:var(--ink-soft); margin:0 0 26px;
+  }
+  .info-cards{display:flex; flex-direction:column; gap:10px; margin-bottom:34px;}
+  .info-card{
+    display:flex; align-items:flex-start; gap:12px;
+    background:var(--white); border:1px solid var(--line);
+    border-radius:var(--radius-md); padding:14px 16px;
+    box-shadow:var(--shadow-sm);
+  }
+  .info-card .ic-emoji{font-size:19px; line-height:1;}
+  .info-card .ic-text{font-size:13.5px; color:var(--ink-soft); line-height:1.6;}
+  .info-card .ic-text b{color:var(--ink); font-weight:700;}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    appearance:none; border:none; cursor:pointer;
+    font-family:'Noto Sans TC',sans-serif; font-weight:700; font-size:15.5px;
+    border-radius:100px; padding:16px 26px;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    transition:transform .15s ease, box-shadow .15s ease, background .2s ease;
+  }
+  .btn-primary{
+    background:var(--pine); color:#fff;
+    box-shadow:0 6px 18px rgba(47,107,87,0.28);
+  }
+  .btn-primary:active{transform:scale(.97);}
+  .btn-primary:hover{background:var(--pine-dark);}
+  .btn-ghost{
+    background:transparent; color:var(--ink-soft); font-weight:600;
+    border:1px solid var(--line);
+  }
+  .btn-ghost:hover{border-color:var(--slate); color:var(--ink);}
+  .btn-block{width:100%;}
+  .btn[disabled]{opacity:.45; cursor:not-allowed;}
+
+  /* ---------- Section header ---------- */
+  .section-head{display:flex; align-items:center; gap:12px; margin-bottom:22px;}
+  .section-emoji{
+    width:44px; height:44px; border-radius:14px; background:var(--mist);
+    display:flex; align-items:center; justify-content:center; font-size:21px; flex-shrink:0;
+  }
+  .section-titles .s-index{font-size:12px; color:var(--clay-deep); font-weight:700; letter-spacing:.05em;}
+  .section-titles h2{margin:2px 0 0; font-size:20px; font-weight:700;}
+
+  /* ---------- Question card ---------- */
+  .qcard{
+    background:var(--white); border:1px solid var(--line);
+    border-radius:var(--radius-lg); padding:20px 18px 18px;
+    margin-bottom:16px; box-shadow:var(--shadow-sm);
+    transition:box-shadow .2s ease, border-color .2s ease;
+  }
+  .qcard.invalid{border-color:var(--clay-deep); box-shadow:0 0 0 3px rgba(219,138,82,0.15);}
+  .q-meta{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+  .q-id{
+    font-family:'Inter',sans-serif; font-size:11.5px; font-weight:700; color:var(--white);
+    background:var(--pine); border-radius:6px; padding:2px 7px; letter-spacing:.02em;
+  }
+  .q-req{font-size:11px; color:var(--clay-deep); font-weight:700;}
+  .q-text{font-size:15.5px; line-height:1.6; font-weight:500; color:var(--ink); margin:0 0 14px;}
+
+  .options{display:flex; flex-direction:column; gap:9px;}
+  .opt{
+    display:flex; align-items:center; gap:12px;
+    border:1.5px solid var(--line); border-radius:var(--radius-md);
+    padding:13px 14px; cursor:pointer; user-select:none;
+    background:var(--paper); transition:all .18s ease;
+  }
+  .opt:hover{border-color:var(--pine); background:var(--mist);}
+  .opt .mark{
+    width:20px; height:20px; border-radius:50%; border:2px solid var(--slate);
+    flex-shrink:0; position:relative; transition:all .18s ease; background:#fff;
+  }
+  .opt.checkbox .mark{border-radius:6px;}
+  .opt .mark::after{
+    content:""; position:absolute; inset:3px; border-radius:50%;
+    background:var(--pine); transform:scale(0); transition:transform .15s ease;
+  }
+  .opt.checkbox .mark::after{border-radius:3px;}
+  .opt.selected{border-color:var(--pine); background:var(--mist);}
+  .opt.selected .mark{border-color:var(--pine);}
+  .opt.selected .mark::after{transform:scale(1);}
+  .opt .opt-label{font-size:14.5px; color:var(--ink); line-height:1.5;}
+  .opt.selected .opt-label{color:var(--pine-dark); font-weight:700;}
+
+  textarea.qtext{
+    width:100%; min-height:110px; border-radius:var(--radius-md);
+    border:1.5px solid var(--line); background:var(--paper);
+    padding:13px 14px; font-family:inherit; font-size:14.5px; color:var(--ink);
+    resize:vertical; transition:border-color .18s ease;
+  }
+  textarea.qtext:focus{outline:none; border-color:var(--pine); background:#fff;}
+  .optional-tag{font-size:11.5px; color:var(--slate); margin-top:8px;}
+
+  .warn{
+    display:none; align-items:center; gap:6px;
+    font-size:12.5px; color:var(--clay-deep); font-weight:600; margin-top:10px;
+  }
+  .qcard.invalid .warn{display:flex;}
+
+  /* ---------- Nav bar ---------- */
+  .navbar{
+    position:sticky; bottom:0; z-index:15;
+    background:rgba(245,246,241,0.94); backdrop-filter:blur(6px);
+    border-top:1px solid var(--line);
+    padding:14px 20px calc(14px + env(safe-area-inset-bottom));
+    display:flex; gap:10px; max-width:640px; margin:0 auto; width:100%;
+  }
+  .navbar .btn-ghost{flex:0 0 auto;}
+  .navbar .btn-primary{flex:1;}
+
+  /* ---------- Completion screen ---------- */
+  .complete{align-items:center; text-align:center; padding-top:70px;}
+  .complete .ascend{margin:0 auto 22px;}
+  .complete h1{font-size:24px; margin:0 0 10px;}
+  .complete p{font-size:14.5px; color:var(--ink-soft); line-height:1.8; max-width:400px;}
+  .complete .thanks-card{
+    margin-top:26px; background:var(--white); border:1px solid var(--line);
+    border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-sm);
+    font-size:13.5px; color:var(--ink-soft); line-height:1.8;
+  }
+
+  @media (min-width:520px){
+    .headline{font-size:34px;}
+    .qcard{padding:24px 22px 20px;}
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================================================
+   CONFIG — 部署 Google Apps Script 後，把 /exec 網址貼在這裡
+   ============================================================ */
+const CONFIG = {
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwsyRWG4MXc4WBINludXUlfCogkzTuiEo3JAigz1F-EdAguIXj4GTA8267nfHr-YU38/exec'
+};
+
+/* ============================================================
+   DATA MODEL
+   ============================================================ */
+const ROLES = {
+  nominate: { label:'提名主管／面談主管', emoji:'👤', hint:'提報部屬升遷、準備資料、執行晉升面談與評核' },
+  nominee:  { label:'被提名者',           emoji:'🙋', hint:'本人被提報升遷' },
+  manager1: { label:'上一階主管',         emoji:'🏢', hint:'該部門最高層級主管，負責審核升遷套表' }
+};
+
+const DEPARTMENTS = ['管理部','財務部','人資部','業務部','工務部','儀電部','設計部','市場開發','研發中心',
+'實驗室廠務部','製造部','技服部','職安室','專案工程','資訊室','產品技術中心','第二事業部','第一事業部',
+'總管理處','董事長室','總工程師室','苗栗工廠'];
+
+const SECTIONS = [
+  { id:0, emoji:'📋', title:'基本資訊' },
+  { id:1, emoji:'📝', title:'提名與資格審查' },
+  { id:2, emoji:'💬', title:'晉升面談' },
+  { id:3, emoji:'🛤️', title:'雙軌制度' },
+  { id:4, emoji:'📢', title:'流程與溝通', titleFor:{ nominee:'制度與評核感受' } },
+  { id:5, emoji:'🌱', title:'升遷後追蹤' },
+  { id:6, emoji:'💡', title:'整體回饋' },
+];
+
+const SCALE4 = (a,b,c,d) => [a,b,c,d];
+
+const QUESTIONS = [
+  // ---- Section 0 基本資訊 ----
+  { id:'q1', section:0, type:'single', roles:'all', required:true,
+    question:'您在本次升遷流程中的角色',
+    options:Object.entries(ROLES).map(([k,v])=>({value:k, label:`${v.emoji} ${v.label}`})) },
+  { id:'q2', section:0, type:'single', roles:'all', required:true,
+    question:'您的所屬單位',
+    options:DEPARTMENTS.map(d=>({value:d,label:d})) },
+
+  // ---- Section 1 提名與資格審查 ----
+  { id:'q3', section:1, type:'single', roles:['nominate'], required:true,
+    question:'您在提名部屬時，是否清楚升遷的資格條件？',
+    options:SCALE4('非常清楚','大致清楚，但某些條件需要再確認','不太清楚','完全不清楚').map(l=>({value:l,label:l})) },
+  { id:'q4', section:1, type:'single', roles:['nominate'], required:true,
+    question:'升遷資格條件套表的填寫是否順暢？',
+    options:SCALE4('很順暢，表格設計清楚','大致可以，但有些欄位不確定怎麼填','不太順暢，花了很多時間理解','非常不順暢').map(l=>({value:l,label:l})) },
+  { id:'q5', section:1, type:'text', roles:['nominate'], required:true,
+    question:'如果有不順暢的地方，具體是哪些欄位或環節？',
+    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」' },
+  { id:'q6', section:1, type:'single', roles:['manager1'], required:true,
+    question:'審核部屬的升遷套表時，資料是否完整、容易理解？',
+    options:SCALE4('很完整清楚，審核順暢','大致完整，但偶爾需要再確認','不太完整，常需要來回確認','資料不足，難以判斷是否符合資格').map(l=>({value:l,label:l})) },
+  { id:'q7', section:1, type:'text', roles:['manager1'], required:true,
+    question:'審核過程中，如果有不清楚或資訊不足以支持判斷的地方，具體是哪些？',
+    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」' },
+  { id:'q8', section:1, type:'single', roles:['nominee'], required:true,
+    question:'在被提名時，您是否了解升遷的標準和流程？',
+    options:['主管有清楚說明','大致了解，但有些細節不確定','不太了解，過程中才逐步知道','完全不了解'].map(l=>({value:l,label:l})) },
+
+  // ---- Section 2 晉升面談 ----
+  { id:'q9', section:2, type:'single', roles:['nominee'], required:true,
+    question:'晉升面談的時間長度是否合適？',
+    options:['剛好','稍長，但可以接受','太長','太短，有些議題沒談到'].map(l=>({value:l,label:l})) },
+  { id:'q10', section:2, type:'single', roles:['nominate'], required:true,
+    question:'面談的問題設計是否有助於評估升遷適任性？',
+    options:['很有幫助，問題能反映實際工作能力','大致有幫助，但有些問題和實際工作關聯不大','不太有幫助','無法判斷'].map(l=>({value:l,label:l})) },
+  { id:'q11', section:2, type:'single', roles:['nominee'], required:true,
+    question:'面談過程中，您是否覺得有足夠的機會表達自己的想法和經驗？',
+    options:['非常充分','大致足夠','不太夠','完全不夠'].map(l=>({value:l,label:l})) },
+  { id:'q28', section:2, type:'single', roles:['nominee'], required:true,
+    question:'主管於晉升面談時，是否有清楚說明晉升後的職務內容與新增責任？',
+    options:[
+      '非常清楚：完整說明職務內容、責任及工作變化，對晉升後角色有明確了解',
+      '大致清楚：有說明主要變化，但部分職務內容或責任仍不夠具體',
+      '不太清楚：僅概略說明，對實際職務變化仍有部分疑問',
+      '完全不清楚：未針對晉升後職務內容及責任變化進行說明'
+    ].map(l=>({value:l,label:l})) },
+  { id:'q12', section:2, type:'single', roles:['nominate'], required:true,
+    question:'晉升面談表評分維度是否容易理解？',
+    options:['很容易，每個維度都清楚','大致可以，但某些維度的定義比較模糊','不太容易','很困難'].map(l=>({value:l,label:l})) },
+  { id:'q13', section:2, type:'text', roles:['nominate'], required:true,
+    question:'如果有模糊的評分維度，請列出是哪些：',
+    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」' },
+
+  // ---- Section 3 雙軌制度 ----
+  { id:'q14', section:3, type:'single', roles:['nominate','manager1'], required:true,
+    question:'您是否了解公司目前升遷分為管理職與技術職兩個軌道？',
+    options:['了解，也清楚兩者的差異','知道有兩軌，但不太清楚差異','不知道'].map(l=>({value:l,label:l})) },
+  { id:'q15', section:3, type:'single', roles:['nominate','manager1'], required:true,
+    question:'您覺得兩個軌道的資格條件是否合理？',
+    options:['都合理','管理職合理，技術職條件需要調整','技術職合理，管理職條件需要調整','都需要調整'].map(l=>({value:l,label:l})),
+    dependsOn:{ id:'q14', showIf:(v)=> v && v!=='不知道' } },
+
+  // ---- Section 4 流程與溝通 ----
+  { id:'q16', section:4, type:'single', roles:['nominate','manager1'], required:true,
+    question:'從開始準備升遷資料至送出晉升套表，整體作業時間是否充裕？',
+    options:['非常充裕，可以充分完成準備','大致充裕，但時間安排稍有壓力','不太充裕，準備時間較為緊迫','非常不充裕，難以在期限內充分準備'].map(l=>({value:l,label:l})) },
+  { id:'q17', section:4, type:'single', roles:['nominate','manager1'], required:true,
+    question:'人資部在升遷流程中的溝通（流程說明、時間通知、結果告知）是否充分？',
+    options:['非常充分','大致充分','不太充分','很不充分'].map(l=>({value:l,label:l})) },
+  { id:'q18', section:4, type:'single', roles:['nominate','manager1'], required:true,
+    question:'升遷審議結果的通知與說明是否清楚？',
+    options:['非常清楚','大致清楚，但部分資訊需要再確認','不太清楚','完全不清楚'].map(l=>({value:l,label:l})) },
+  { id:'q25', section:4, type:'single', roles:['nominee'], required:true,
+    question:'是否了解本次升遷的評估標準與考量項目？',
+    options:['非常了解','大致了解','不太了解','完全不了解'].map(l=>({value:l,label:l})) },
+  { id:'q26', section:4, type:'single', roles:['nominee'], required:true,
+    question:'本次升遷評估所重視的條件，與您實際工作表現及職務能力是否相符？',
+    options:['非常相符','大致相符','不太相符','完全不相符'].map(l=>({value:l,label:l})) },
+  { id:'q27', section:4, type:'single', roles:['nominee'], required:true,
+    question:'本次升遷評估內容，與晉升後職務所需的能力及條件是否相符？',
+    options:['非常相符','大致相符','不太相符','完全不相符'].map(l=>({value:l,label:l})) },
+
+  // ---- Section 5 升遷後追蹤 ----
+  { id:'q19', section:5, type:'single', roles:['nominee'], required:true,
+    question:'升遷後，您是否了解接下來的輔導追蹤機制（晉升後輔導追蹤表）？',
+    options:['了解，主管有說明','大致了解','不太了解','完全沒聽過'].map(l=>({value:l,label:l})) },
+  { id:'q20', section:5, type:'single', roles:['nominate'], required:true,
+    question:'晉升後輔導追蹤表是否有助於管理被升遷者的過渡期？',
+    options:['很有幫助','有些幫助','沒什麼幫助','尚未使用，無法判斷'].map(l=>({value:l,label:l})) },
+
+  // ---- Section 6 整體回饋 ----
+  { id:'q21a', section:6, type:'single', roles:['nominate'], required:true,
+    question:'您是否曾參與過去（舊制）的升遷流程？',
+    options:['是，曾參與過舊制升遷流程','否，這是我第一次參與升遷流程，無法比較'].map(l=>({value:l,label:l})) },
+  { id:'q21b', section:6, type:'single', roles:['nominate'], required:true,
+    question:'和過去的升遷方式相比，今年的新制度整體而言：',
+    options:['明顯比以前好','有進步，但還有改善空間','差不多','反而更複雜了'].map(l=>({value:l,label:l})),
+    dependsOn:{ id:'q21a', showIf:(v)=> v==='是，曾參與過舊制升遷流程' } },
+  { id:'q22', section:6, type:'text', roles:'all', required:true,
+    question:'本次升遷流程中，您覺得做得最好的一件事是什麼？',
+    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」' },
+  { id:'q23', section:6, type:'text', roles:'all', required:true,
+    question:'如果明年只能改一件事，您最希望改的是什麼？',
+    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」' },
+  { id:'q24', section:6, type:'text', roles:['nominate','manager1'], required:true,
+    question:'對雙軌制度、面談安排或整體流程，還有其他想法或建議嗎？',
+    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」' },
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  screen:'welcome',      // welcome | survey | complete
+  sectionPointer:0,      // index into activeSections()
+  answers: {},            // { qid: value | [values] }
+  invalidIds: new Set(),
+};
+
+function getSelectedRoles(){
+  const v = state.answers['q1'];
+  return v ? [v] : [];
+}
+
+function questionApplies(q){
+  if(q.roles === 'all') return true;
+  const roles = getSelectedRoles();
+  if(roles.length===0) return false;
+  return q.roles.some(r=>roles.includes(r));
+}
+
+function questionVisible(q){
+  if(!questionApplies(q)) return false;
+  if(q.dependsOn){
+    const parentVal = state.answers[q.dependsOn.id];
+    return q.dependsOn.showIf(parentVal);
+  }
+  return true;
+}
+
+function questionsInSection(sectionId){
+  return QUESTIONS.filter(q=>q.section===sectionId && questionVisible(q));
+}
+
+function activeSections(){
+  return SECTIONS.filter(s=>questionsInSection(s.id).length>0);
+}
+
+function getSectionDisplayTitle(section){
+  if(section.titleFor){
+    const roles = getSelectedRoles();
+    if(roles.length===1 && section.titleFor[roles[0]]) return section.titleFor[roles[0]];
+  }
+  return section.title;
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const app = document.getElementById('app');
+
+function render(){
+  if(state.screen==='welcome'){ renderWelcome(); return; }
+  if(state.screen==='complete'){ renderComplete(); return; }
+  renderSurvey();
+}
+
+function ascendSVG(){
+  return `<svg class="ascend" viewBox="0 0 86 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="38" width="18" height="18" rx="5" fill="#E3EFE7"/>
+    <rect x="24" y="24" width="18" height="32" rx="5" fill="#B7D6C7"/>
+    <rect x="48" y="12" width="18" height="44" rx="5" fill="#2F6B57"/>
+    <rect x="68" y="0" width="18" height="56" rx="5" fill="#DB8A52"/>
+  </svg>`;
+}
+
+function renderWelcome(){
+  app.innerHTML = `
+    <div class="screen welcome">
+      ${ascendSVG()}
+      <div class="eyebrow">📋 HR 升遷制度回饋</div>
+      <h1 class="headline serif">115年度升遷流程回饋問卷</h1>
+      <p class="subhead">一起讓升遷的每一步，走得更清楚、更踏實。</p>
+      <p class="desc">本問卷針對今年度參與升遷流程的相關人員蒐集回饋，希望透過大家實際參與過程中的經驗與感受，了解新版升遷制度在執行上的體驗，作為明年度制度調整與持續改善的重要參考。</p>
+      <div class="info-cards">
+        <div class="info-card"><span class="ic-emoji">🔒</span><span class="ic-text"><b>不記名方式</b> 進行，所有回饋將以整體彙整方式分析，僅作為制度改善使用，不會追溯至個人。</span></div>
+        <div class="info-card"><span class="ic-emoji">⏱️</span><span class="ic-text">填答時間約 <b>5–8 分鐘</b>，題目會依照您的角色自動顯示相關內容。</span></div>
+      </div>
+      <button class="btn btn-primary btn-block" id="startBtn">開始填寫 →</button>
+    </div>
+  `;
+  document.getElementById('startBtn').onclick = ()=>{
+    state.screen='survey';
+    state.sectionPointer=0;
+    render();
+    window.scrollTo(0,0);
+  };
+}
+
+function renderProgress(){
+  const sections = activeSections();
+  const total = sections.length || SECTIONS.length;
+  const idx = Math.min(state.sectionPointer, total-1);
+  const pct = Math.round(((idx+1)/total)*100);
+  const currentSection = sections[idx] || SECTIONS[0];
+  return `
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>第 ${idx+1} 部分／共 ${total} 部分　<span class="section-name">${currentSection.emoji} ${getSectionDisplayTitle(currentSection)}</span></span>
+        <span class="num" style="font-weight:600;">${pct}%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-dots">
+        ${sections.map((s,i)=>`<div class="p-dot ${i<idx?'done':''} ${i===idx?'current':''}"></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function optionRow(q, opt, isSelected){
+  const cls = q.type==='multi' ? 'opt checkbox' : 'opt';
+  return `
+    <div class="${cls} ${isSelected?'selected':''}" data-qid="${q.id}" data-val="${escapeAttr(opt.value)}">
+      <span class="mark"></span>
+      <span class="opt-label">${opt.label}</span>
+    </div>
+  `;
+}
+
+function escapeAttr(s){
+  return String(s).replace(/"/g,'&quot;');
+}
+
+function renderQuestionCard(q){
+  const isInvalid = state.invalidIds.has(q.id);
+  const val = state.answers[q.id];
+  let body = '';
+
+  if(q.type==='text'){
+    body = `<textarea class="qtext" data-qid="${q.id}" placeholder="${q.placeholder||'請分享您的實際經驗或建議；若無意見請填「無」'}">${val ? escapeHtml(val) : ''}</textarea>
+      ${!q.required ? `<div class="optional-tag">此題選填</div>` : ''}`;
+  } else if(q.type==='multi'){
+    const selectedArr = Array.isArray(val) ? val : [];
+    body = `<div class="options">${q.options.map(o=>optionRow(q,o, selectedArr.includes(o.value))).join('')}</div>`;
+  } else {
+    body = `<div class="options">${q.options.map(o=>optionRow(q,o, val===o.value)).join('')}</div>`;
+  }
+
+  return `
+    <div class="qcard ${isInvalid?'invalid':''}" id="card-${q.id}">
+      <div class="q-meta">
+        <span class="q-id num">${q.id.toUpperCase()}</span>
+        ${q.required ? '' : '<span class="q-req" style="color:var(--slate);">選填</span>'}
+      </div>
+      <p class="q-text">${q.question}</p>
+      ${body}
+      <div class="warn">⚠️ 這一題還沒完成，再確認一下就可以繼續囉</div>
+    </div>
+  `;
+}
+
+function renderSurvey(){
+  const sections = activeSections();
+  if(sections.length===0){ /* nothing selected yet, still show section 0 */ }
+  const idx = Math.min(state.sectionPointer, Math.max(sections.length-1,0));
+  const section = sections[idx] || SECTIONS[0];
+  const qs = questionsInSection(section.id);
+  const isLast = idx === sections.length-1;
+
+  app.innerHTML = `
+    ${renderProgress()}
+    <div class="screen">
+      <div class="section-head">
+        <div class="section-emoji">${section.emoji}</div>
+        <div class="section-titles">
+          <div class="s-index num">SECTION ${String(idx+1).padStart(2,'0')}</div>
+          <h2 class="serif">${getSectionDisplayTitle(section)}</h2>
+        </div>
+      </div>
+      <div id="qlist">
+        ${qs.map(renderQuestionCard).join('')}
+      </div>
+    </div>
+    <div class="navbar">
+      ${idx>0 ? `<button class="btn btn-ghost" id="prevBtn">← 上一步</button>` : `<button class="btn btn-ghost" id="prevBtn" disabled>← 上一步</button>`}
+      <button class="btn btn-primary" id="nextBtn">${isLast ? '送出回饋 ✨' : '下一步 →'}</button>
+    </div>
+  `;
+
+  bindOptionEvents();
+  bindTextEvents();
+
+  document.getElementById('nextBtn').onclick = ()=> handleNext(qs, isLast);
+  const prevBtn = document.getElementById('prevBtn');
+  if(prevBtn && !prevBtn.disabled) prevBtn.onclick = handlePrev;
+}
+
+function bindOptionEvents(){
+  document.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const qid = el.getAttribute('data-qid');
+      const val = el.getAttribute('data-val');
+      const q = QUESTIONS.find(x=>x.id===qid);
+      if(q.type==='multi'){
+        let arr = Array.isArray(state.answers[qid]) ? [...state.answers[qid]] : [];
+        if(arr.includes(val)) arr = arr.filter(v=>v!==val);
+        else arr.push(val);
+        state.answers[qid] = arr;
+      } else {
+        state.answers[qid] = val;
+        // clear dependent answers if this question changes (e.g. q14 -> q15, q21a -> q21b)
+        QUESTIONS.forEach(dq=>{
+          if(dq.dependsOn && dq.dependsOn.id===qid){
+            delete state.answers[dq.id];
+          }
+        });
+      }
+      state.invalidIds.delete(qid);
+      renderSurvey();
+    });
+  });
+}
+
+function bindTextEvents(){
+  document.querySelectorAll('.qtext').forEach(el=>{
+    el.addEventListener('input', (e)=>{
+      const qid = el.getAttribute('data-qid');
+      state.answers[qid] = e.target.value;
+      state.invalidIds.delete(qid);
+      const card = document.getElementById('card-'+qid);
+      if(card) card.classList.remove('invalid');
+    });
+  });
+}
+
+function isAnswered(q){
+  const v = state.answers[q.id];
+  if(q.type==='multi') return Array.isArray(v) && v.length>0;
+  if(q.type==='text') return true; // validated separately by required flag below
+  return v!==undefined && v!==null && v!=='';
+}
+
+function handleNext(qs, isLast){
+  const invalid = [];
+  qs.forEach(q=>{
+    if(q.required){
+      if(q.type==='text'){
+        const v = state.answers[q.id];
+        if(!v || !v.trim()) invalid.push(q.id);
+      } else if(!isAnswered(q)){
+        invalid.push(q.id);
+      }
+    }
+  });
+
+  if(invalid.length>0){
+    state.invalidIds = new Set(invalid);
+    renderSurvey();
+    const firstCard = document.getElementById('card-'+invalid[0]);
+    if(firstCard) firstCard.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  state.invalidIds = new Set();
+  if(isLast){
+    const nextBtn = document.getElementById('nextBtn');
+    if(nextBtn){ nextBtn.disabled = true; nextBtn.textContent = '送出中…'; }
+    submitToSheet(state.answers).finally(()=>{
+      state.screen='complete';
+      render();
+      window.scrollTo(0,0);
+    });
+  } else {
+    state.sectionPointer++;
+    render();
+    window.scrollTo(0,0);
+  }
+}
+
+function handlePrev(){
+  state.invalidIds = new Set();
+  state.sectionPointer = Math.max(0, state.sectionPointer-1);
+  render();
+  window.scrollTo(0,0);
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function isConfigured(){
+  return CONFIG.APPS_SCRIPT_URL && CONFIG.APPS_SCRIPT_URL.indexOf('PASTE_YOUR') !== 0;
+}
+
+async function submitToSheet(answers){
+  if(!isConfigured()) return; // 尚未設定後端網址時，先跳過送出，方便本機測試畫面
+  try{
+    await fetch(CONFIG.APPS_SCRIPT_URL, {
+      method:'POST',
+      mode:'no-cors', // Apps Script 網頁應用程式的回應沒有 CORS 標頭，用 no-cors 送出即可
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify(answers)
+    });
+  } catch(err){
+    console.error('送出至試算表失敗：', err);
+  }
+}
+
+function renderComplete(){
+  app.innerHTML = `
+    <div class="screen complete">
+      ${ascendSVG()}
+      <h1 class="serif">✨ 感謝您的回饋</h1>
+      <p>每一份實際參與經驗，都是我們持續優化升遷制度的重要參考。<br/>謝謝您花時間留下這份回饋 🌱</p>
+      <div class="thanks-card">
+        您的回饋已完成不記名彙整，將作為明年度升遷制度調整的重要依據。<br/>
+        如對本次流程有任何疑問，歡迎隨時與人資部聯繫。
+      </div>
+    </div>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
