@@ -338,11 +338,7 @@ const QUESTIONS = [
     dependsOn:{ id:'q14', showIf:(v)=> v && v!=='不知道' } },
   { id:'q15b', section:3, type:'text', roles:['nominate','manager1'], required:true,
     question:'請具體說明哪個部分建議調整？',
-    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」',
-    dependsOn:{ id:'q15', showIf:(v)=> v && v!=='都合理' } },
-  { id:'q15b', section:3, type:'text', roles:['nominate','manager1'], required:true,
-    question:'請具體說明哪個部分建議調整？',
-    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」',
+    placeholder:'請分享您的實際經驗或建議',
     dependsOn:{ id:'q15', showIf:(v)=> v && v!=='都合理' } },
 
   // ---- Section 4 流程與溝通 ----
