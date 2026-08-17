@@ -336,6 +336,14 @@ const QUESTIONS = [
     question:'您覺得兩個軌道的資格條件是否合理？',
     options:['都合理','管理職合理，技術職條件需要調整','技術職合理，管理職條件需要調整','都需要調整'].map(l=>({value:l,label:l})),
     dependsOn:{ id:'q14', showIf:(v)=> v && v!=='不知道' } },
+  { id:'q15b', section:3, type:'text', roles:['nominate','manager1'], required:true,
+    question:'請具體說明哪個部分建議調整？',
+    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」',
+    dependsOn:{ id:'q15', showIf:(v)=> v && v!=='都合理' } },
+  { id:'q15b', section:3, type:'text', roles:['nominate','manager1'], required:true,
+    question:'請具體說明哪個部分建議調整？',
+    placeholder:'請分享您的實際經驗或建議；若無意見請填「無」',
+    dependsOn:{ id:'q15', showIf:(v)=> v && v!=='都合理' } },
 
   // ---- Section 4 流程與溝通 ----
   { id:'q16', section:4, type:'single', roles:['nominate','manager1'], required:true,
