@@ -246,7 +246,10 @@
    CONFIG — 部署 Google Apps Script 後，把 /exec 網址貼在這裡
    ============================================================ */
 const CONFIG = {
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwsyRWG4MXc4WBINludXUlfCogkzTuiEo3JAigz1F-EdAguIXj4GTA8267nfHr-YU38/exec'
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwsyRWG4MXc4WBINludXUlfCogkzTuiEo3JAigz1F-EdAguIXj4GTA8267nfHr-YU38/exec',
+  // 問卷截止日期（含當天，過了這個時間點就不再開放填寫）。時區為台灣 (+08:00)。
+  DEADLINE: '2026-09-08T23:59:59+08:00',
+  DEADLINE_DISPLAY: '115年9月8日'
 };
 
 /* ============================================================
@@ -435,12 +438,18 @@ function getSectionDisplayTitle(section){
   return section.title;
 }
 
+function isPastDeadline(){
+  if(!CONFIG.DEADLINE) return false;
+  return Date.now() > new Date(CONFIG.DEADLINE).getTime();
+}
+
 /* ============================================================
    RENDER
    ============================================================ */
 const app = document.getElementById('app');
 
 function render(){
+  if(state.screen==='closed'){ renderClosed(); return; }
   if(state.screen==='welcome'){ renderWelcome(); return; }
   if(state.screen==='complete'){ renderComplete(); return; }
   renderSurvey();
@@ -466,11 +475,13 @@ function renderWelcome(){
       <div class="info-cards">
         <div class="info-card"><span class="ic-emoji">🔒</span><span class="ic-text"><b>不記名方式</b> 進行，所有回饋將以整體彙整方式分析，僅作為制度改善使用，不會追溯至個人。</span></div>
         <div class="info-card"><span class="ic-emoji">⏱️</span><span class="ic-text">填答時間約 <b>5–8 分鐘</b>，題目會依照您的角色自動顯示相關內容。</span></div>
+        <div class="info-card"><span class="ic-emoji">📅</span><span class="ic-text">填答期限至 <b>${CONFIG.DEADLINE_DISPLAY}</b>，截止後將無法再填寫，請儘早完成。</span></div>
       </div>
       <button class="btn btn-primary btn-block" id="startBtn">開始填寫 →</button>
     </div>
   `;
   document.getElementById('startBtn').onclick = ()=>{
+    if(isPastDeadline()){ state.screen='closed'; render(); window.scrollTo(0,0); return; }
     state.screen='survey';
     state.sectionPointer=0;
     render();
@@ -701,6 +712,21 @@ function renderComplete(){
   `;
 }
 
+function renderClosed(){
+  app.innerHTML = `
+    <div class="screen complete">
+      ${ascendSVG()}
+      <h1 class="serif">🔒 問卷已截止填寫</h1>
+      <p>本問卷的填答期限至 <b>${CONFIG.DEADLINE_DISPLAY}</b> 止，目前已超過截止時間，暫停接受新的回覆。</p>
+      <div class="thanks-card">
+        感謝您對升遷制度回饋的關心。<br/>
+        如有相關意見，歡迎直接與人資部聯繫。
+      </div>
+    </div>
+  `;
+}
+
+if(isPastDeadline()){ state.screen='closed'; }
 render();
 </script>
 </body>
